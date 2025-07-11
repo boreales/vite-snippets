@@ -25,5 +25,4 @@ dist-ssr
 
 src/Filter.jsx
 src/List2.jsx
-src/Search.jsx
 src/Snippet2.jsx
