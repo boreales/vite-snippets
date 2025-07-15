@@ -54,6 +54,12 @@ export default function Snippet({item, setSnippets, snippets, index}) {
             URL.revokeObjectURL(url);
         };
 
+        const shareSnippet = () => {
+            const url = `${window.location.origin}/snippet/${index}`;
+            navigator.clipboard.writeText(url);
+            alert('Lien copié dans le presse-papier !');
+          };
+
     return(
         <>
             {item.title} - {item.language} 
@@ -87,5 +93,6 @@ export default function Snippet({item, setSnippets, snippets, index}) {
             }}>Edit</button>
             <button onClick={() => downloadSnippet(index)}>Download</button>
             <button style={{background:'red', color:'white'}} onClick={() => deleteSnippet(index)}>Delete</button>
+            <button onClick={shareSnippet}>Partager</button>
         </>
 )}

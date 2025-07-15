@@ -1,13 +1,19 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './App.css'
-import Form from './Form.jsx'
-import List from './List.jsx'
-import Header from './Header'
-import Search from './Search.jsx'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SnippetPage from './SnippetPage';
+import AppComponent from './AppComponent.jsx'
 
 function App() {
   const [snippets, setSnippets] = useState([]);
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+      const storedSnippets = JSON.parse(localStorage.getItem('snippets'));
+      if (storedSnippets) {
+      setSnippets(storedSnippets);
+      }
+  }, []);
 
   const filteredSnippets = snippets.filter(
     (snippet) =>
@@ -16,14 +22,12 @@ function App() {
   );
 
   return (
-      <>
-        <Header />
-        <Search search={search} setSearch={setSearch}/>
-        <hr></hr>
-        <Form snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch}/>
-        <hr></hr>
-        <List snippets={filteredSnippets} setSnippets={setSnippets} search={search}/>
-      </>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AppComponent snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch} />} />
+          <Route path="/snippet/:id" element={<SnippetPage snippets={filteredSnippets} />} />
+        </Routes>
+      </BrowserRouter>
   )
 }
 
