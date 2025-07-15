@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { docco, arduinoLight, androidstudio } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-export default function Snippet({item, setSnippets, snippets, index}) {
+export default function Snippet({item, setSnippets, snippets, index, theme}) {
+    switch (theme) {
+        case 'arduinoLight':
+            var themeSet = arduinoLight;
+            break;
+        case 'androidstudio':
+            var themeSet = androidstudio;
+            break;
+        default:
+            var themeSet = docco;
+    }
         const [isEditing, setIsEditing] = useState(false);
         const [editedTitle, setEditedTitle] = useState('');
         const [editedLanguage, setEditedLanguage] = useState('');
@@ -57,7 +67,7 @@ export default function Snippet({item, setSnippets, snippets, index}) {
     return(
         <>
             {item.title} - {item.language} 
-            <SyntaxHighlighter language={item.language} style={docco}>{item.code}</SyntaxHighlighter>
+            <SyntaxHighlighter language={item.language} style={themeSet}>{item.code}</SyntaxHighlighter>
             {isEditing && (
             <div>
                 <h3>Edit Snippet</h3>
@@ -88,4 +98,5 @@ export default function Snippet({item, setSnippets, snippets, index}) {
             <button onClick={() => downloadSnippet(index)}>Download</button>
             <button style={{background:'red', color:'white'}} onClick={() => deleteSnippet(index)}>Delete</button>
         </>
-)}
+    )
+}
