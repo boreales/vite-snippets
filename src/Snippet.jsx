@@ -58,7 +58,7 @@ export default function Snippet({item, setSnippets, snippets, index}) {
         <>
             {item.title} - {item.language} 
             <SyntaxHighlighter language={item.language} style={docco}>{item.code}</SyntaxHighlighter>
-            { isEditing && (
+            {isEditing && (
             <div>
                 <h3>Edit Snippet</h3>
                 <input 
