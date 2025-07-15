@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Snippet from './Snippet';
+import Snippet from './Snippet.jsx';
 
 export default function List({snippets, setSnippets}){
    
