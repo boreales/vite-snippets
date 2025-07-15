@@ -24,11 +24,11 @@ export default function List({snippets, setSnippets, search}){
 
     return(
         <>
+            <Filter snippets={snippets} setSnippets={setSnippets} />
+            <hr></hr>
             <h2>Liste des Snippets</h2>
             <p>Nombre de snippets : {snippets.length}</p>
             <button onClick={() => handleChangeTheme(theme === 'docco' ? 'androidstudio' : 'docco')}>Change Theme</button>
-            <hr></hr>
-            <Filter snippets={snippets} setSnippets={setSnippets} />
             <hr></hr>
             <ul>
             {filteredSnippets.map((item, index) => (
