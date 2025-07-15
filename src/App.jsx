@@ -13,22 +13,17 @@ function App() {
   const [search, setSearch] = useState('');
 
   const dbRef = ref(getDatabase());
-    get(child(dbRef, `snippets`)).then((snapshot) => {
+    get(child(dbRef, `snippets/0`)).then((snapshot) => {
       if (snapshot.exists()) {
-        console.log(snapshot.val());
+        const data = snapshot.val();
+        console.log(data);
+        setSnippets([data]);
       } else {
         console.log("No data available");
       }
     }).catch((error) => {
       console.error(error);
     });
-
-  useEffect(() => {
-      const storedSnippets = JSON.parse(localStorage.getItem('snippets'));
-      if (storedSnippets) {
-      setSnippets(storedSnippets);
-      }
-  }, []);
 
   const filteredSnippets = snippets.filter(
     (snippet) =>
