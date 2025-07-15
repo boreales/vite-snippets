@@ -22,7 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-src/Filter.jsx
-src/List2.jsx
-src/Snippet2.jsx
