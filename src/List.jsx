@@ -19,7 +19,7 @@ export default function List({snippets, setSnippets}){
         <>
             <h2>Liste des Snippets</h2>
             <p>Nombre de snippets : {snippets.length}</p>
-            <button onClick={() => handleChangeTheme('androidstudio')}>Change Theme</button>
+            <button onClick={() => handleChangeTheme(theme === 'docco' ? 'androidstudio' : 'docco')}>Change Theme</button>
             <hr></hr>
             <ul>
             {snippets.map((item, index) => (
