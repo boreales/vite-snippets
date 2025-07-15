@@ -3,10 +3,25 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SnippetPage from './SnippetPage';
 import AppComponent from './AppComponent.jsx'
+import './firebase.js';
+
+//On peut ensuite accéder aux fonctions de la librairie pour interagir avec la base de données
+import { getDatabase, ref, child, get } from "firebase/database";
 
 function App() {
   const [snippets, setSnippets] = useState([]);
   const [search, setSearch] = useState('');
+
+  const dbRef = ref(getDatabase());
+    get(child(dbRef, `snippets`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
 
   useEffect(() => {
       const storedSnippets = JSON.parse(localStorage.getItem('snippets'));
