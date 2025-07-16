@@ -63,7 +63,7 @@ function App() {
     {isLogged &&
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AppComponent setIsLogged={setIsLogged} snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch} />} />
+          <Route path="/" element={<AppComponent isLoaded={isLoaded} setIsLogged={setIsLogged} snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch} />} />
           <Route path="/snippet/:id" element={<SnippetPage snippets={filteredSnippets} />} />
         </Routes>
       </BrowserRouter>

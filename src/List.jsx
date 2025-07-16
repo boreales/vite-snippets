@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Snippet from './Snippet';
 import Filter from './Filter';
 
-export default function List({snippets, setSnippets, search}){
+export default function List({snippets, setSnippets, search, isLoaded}){
     const [theme, setTheme] = useState('docco');
 
     const filteredSnippets = snippets.filter(snippet =>

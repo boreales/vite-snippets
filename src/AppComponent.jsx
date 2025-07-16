@@ -2,13 +2,15 @@ import Form from './Form.jsx'
 import List from './List.jsx'
 import Header from './Header'
 import Search from './Search.jsx'
+import BeatLoader from 'react-spinners/BeatLoader';
 
 export default function AppComponent({
     snippets, 
     setSnippets, 
     search, 
     setSearch,
-    setIsLogged
+    setIsLogged,
+    isLoaded
 }) {
     function logout() {
         localStorage.removeItem('userId');
@@ -17,6 +19,9 @@ export default function AppComponent({
 
     return (
     <>
+        {!isLoaded ? <BeatLoader /> 
+        : (
+        <>
         <Header />
         <button type="button" className="link" onClick={logout}>Logout</button>
         <br/>
@@ -24,7 +29,9 @@ export default function AppComponent({
         <hr></hr>
         <Form snippets={snippets} setSnippets={setSnippets} search={search} setSearch={setSearch}/>
         <hr></hr>
-        <List snippets={snippets} setSnippets={setSnippets} search={search}/>
+        <List isLoaded={isLoaded} snippets={snippets} setSnippets={setSnippets} search={search}/>
+        </>
+        )}
     </>
     );
 }
