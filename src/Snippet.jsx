@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco, arduinoLight, androidstudio } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { getDatabase, ref, set} from "firebase/database";
 
 export default function Snippet({item, setSnippets, snippets, index, theme}) {
     switch (theme) {
@@ -19,13 +20,16 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
         const [editedCode, setEditedCode] = useState('');
 
         const deleteSnippet = (index) => {
+            const db = getDatabase();
+            const snippetsRef = ref(db, 'snippets/' + item.id);
+            //On supprime le snippet de la base de données
+            set(snippetsRef, null).then(() => {
+                console.log("Snippet deleted successfully");
+            }).catch(error => {
+                console.error("Erreur lors de la suppression du snippet:", error);
+            });
             //Avec filter on supprime du state l'élément correspondant à l'index donné
             setSnippets(snippets.filter((_, i) => i !== index));
-            //On récupère la liste du localStorage pour supprimer l'index donné
-            const savedSnippets = JSON.parse(localStorage.getItem('snippets') || '[]');
-            savedSnippets.splice(index, 1);
-            //On réenregistre la nouvelle liste avec l'item en moins
-            localStorage.setItem('snippets', JSON.stringify(savedSnippets));
         };
 
         const handleEditToggle = () => {
@@ -64,6 +68,12 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
             URL.revokeObjectURL(url);
         };
 
+        const shareSnippet = () => {
+            const url = `${window.location.origin}/snippet/${index}`;
+            navigator.clipboard.writeText(url);
+            alert('Lien copié dans le presse-papier !');
+          };
+
     return(
         <>
             {item.title} - {item.language} 
@@ -96,7 +106,8 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
                 handleEditToggle();
             }}>Edit</button>
             <button onClick={() => downloadSnippet(index)}>Download</button>
-            <button style={{background:'red', color:'white'}} onClick={() => deleteSnippet(index)}>Delete</button>
+            <button style={{background:'red', color:'white'}} onClick={() => deleteSnippet(item.id)}>Delete</button>
+            <button onClick={shareSnippet}>Partager</button>
         </>
     )
 }

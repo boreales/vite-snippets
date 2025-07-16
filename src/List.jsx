@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Snippet from './Snippet';
 import Filter from './Filter';
 
 export default function List({snippets, setSnippets, search}){
     const [theme, setTheme] = useState('docco');
-
-    useEffect(() => {
-        const storedSnippets = JSON.parse(localStorage.getItem('snippets'));
-        if (storedSnippets) {
-        setSnippets(storedSnippets);
-        }
-    }, []);
 
     const filteredSnippets = snippets.filter(snippet =>
         snippet.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -31,7 +24,7 @@ export default function List({snippets, setSnippets, search}){
             <button onClick={() => handleChangeTheme(theme === 'docco' ? 'androidstudio' : 'docco')}>Change Theme</button>
             <hr></hr>
             <ul>
-            {filteredSnippets.map((item, index) => (
+            {snippets.map((item, index) => (
                 <li key={index}>
                     <Snippet snippets={snippets} setSnippets={setSnippets} item={item} index={index} theme={theme} />
                 </li>
