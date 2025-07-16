@@ -4,26 +4,42 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SnippetPage from './SnippetPage';
 import AppComponent from './AppComponent.jsx'
 import './firebase.js';
-
-//On peut ensuite accéder aux fonctions de la librairie pour interagir avec la base de données
 import { getDatabase, ref, child, get } from "firebase/database";
 
 function App() {
   const [snippets, setSnippets] = useState([]);
   const [search, setSearch] = useState('');
-
+  const [isLoaded, setIsLoaded] = useState(false);
   const dbRef = ref(getDatabase());
-    get(child(dbRef, `snippets/0`)).then((snapshot) => {
+
+  async function loadedSnippets() {
+    get(child(dbRef, `snippets`)).then((snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        console.log(data);
-        setSnippets([data]);
+        console.log('Data', Object.entries(data));
+        if (data) {
+          const snippetsArray = Object.entries(data).map(([id, snippet]) => ({
+            id,
+            ...snippet
+          }));
+          setSnippets(snippetsArray);
+          setIsLoaded(true);
+        }
       } else {
         console.log("No data available");
+        setIsLoaded(true);
       }
     }).catch((error) => {
       console.error(error);
+      setIsLoaded(true);
     });
+  }
+
+   useEffect(() => {
+      if (!isLoaded) {
+        loadedSnippets();
+      }
+  }, [snippets]);
 
   const filteredSnippets = snippets.filter(
     (snippet) =>
