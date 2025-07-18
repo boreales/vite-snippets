@@ -10,6 +10,7 @@ import Auth from './Auth.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import AppComponent from './AppComponent.jsx';
 import SnippetPage from './SnippetPage.jsx';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
   const [snippets, setSnippets] = useState([]);
@@ -62,17 +63,12 @@ function App() {
     <>
     {!isLogged && (<Auth setIsLogged={setIsLogged} />)}
     {isLogged && (
-        <BrowserRouter>
-            <AppComponent 
-                snippets={filteredSnippets} 
-                setSnippets={setSnippets} 
-                search={search} 
-                setSearch={setSearch}
-                setIsLogged={setIsLogged}
-                isLoaded={isLoaded}
-            />
-            <SnippetPage snippets={filteredSnippets} />
-        </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AppComponent snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch} isLoaded={isLoaded} />} />
+          <Route path="/snippet/:id" element={<SnippetPage snippets={filteredSnippets} />} />
+        </Routes>
+      </BrowserRouter>
     )}
     </>
   )

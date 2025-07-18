@@ -23,7 +23,6 @@ export default function AppComponent({
         : (
         <>
         <Header />
-        <button type="button" className="link" onClick={logout}>Logout</button>
         <br/>
         <Search search={search} setSearch={setSearch}/>
         <hr></hr>
