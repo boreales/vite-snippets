@@ -1,42 +1,24 @@
 import React, {useState} from "react";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import './Form.css';
-import './firebase.js';
-import { getDatabase, ref, set} from "firebase/database";
+import { useSnippets } from './SnippetContext';
 
-function Form({snippets, setSnippets}) {
+function Form() {
     const [formData, setFormData] = useState({
       title: '',
       code: '',
       language: '',
     });
+    const { addSnippet } = useSnippets();
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
-    const addSnippet = () => {
-        if (!formData.title.trim() || !formData.code.trim() || !formData.language.trim()) {
-            alert("Please fill in all fields");
-            return;
-        }
-        const newSnippet = {
-            id: Date.now(),
-            title: formData.title,
-            code: formData.code,
-            language: formData.language,
-        };
-        setSnippets([...snippets, newSnippet]);
-        
-        const db = getDatabase();
-        const snippetsRef = ref(db, 'snippets/' + newSnippet.id);
-        set(snippetsRef, newSnippet).then(() => {
-            console.log("Snippet added successfully");
-          }).catch(error => {
-            console.error("Erreur lors de l'ajout du snippet:", error);
-        });
+    const handleSubmit = () => {
+        addSnippet(formData);
         setFormData({ title: '', code: '', language: '' });
-    };
+    }
 
     return (
         <div className='App-form'>
@@ -58,7 +40,7 @@ function Form({snippets, setSnippets}) {
             onChange={(e) => handleInputChange('code', e.target.value)}
             placeholder="Snippet Code"
             />
-            <button onClick={addSnippet}><BsFillPlusCircleFill /> Add Snippet</button>
+            <button onClick={handleSubmit}><BsFillPlusCircleFill /> Add Snippet</button>
         </div>
     );
 }

@@ -1,12 +1,9 @@
 import { useParams } from 'react-router-dom';
+import { useSnippet } from './SnippetContext.jsx';
 
 export default function SnippetPage({ snippets }) {
   const { id } = useParams();
-  const snippet = snippets.find((snippet) => {
-    if (snippet.id.toString() === id.toString()) {
-      return snippet;
-    }
-  });
+  const snippet = useSnippet(id);
   if (!snippet) return <div>Snippet introuvable</div>;
   return (
     <div>
