@@ -7,6 +7,9 @@ import Search from './Search.jsx';
 import Form from './Form.jsx';
 import List from './List.jsx';
 import Auth from './Auth.jsx'; 
+import { BrowserRouter } from 'react-router-dom';
+import AppComponent from './AppComponent.jsx';
+import SnippetPage from './SnippetPage.jsx';
 
 function App() {
   const [snippets, setSnippets] = useState([]);
@@ -59,14 +62,17 @@ function App() {
     <>
     {!isLogged && (<Auth setIsLogged={setIsLogged} />)}
     {isLogged && (
-      <>
-      <Header />
-      <Search search={search} setSearch={setSearch}/>
-      <hr></hr>
-      <Form snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch}/>
-      <hr></hr>
-      <List snippets={filteredSnippets} setSnippets={setSnippets} search={search}/>
-      </>
+        <BrowserRouter>
+            <AppComponent 
+                snippets={filteredSnippets} 
+                setSnippets={setSnippets} 
+                search={search} 
+                setSearch={setSearch}
+                setIsLogged={setIsLogged}
+                isLoaded={isLoaded}
+            />
+            <SnippetPage snippets={filteredSnippets} />
+        </BrowserRouter>
     )}
     </>
   )
