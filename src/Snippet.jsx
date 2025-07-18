@@ -19,18 +19,7 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
         const [editedLanguage, setEditedLanguage] = useState('');
         const [editedCode, setEditedCode] = useState('');
 
-        const deleteSnippet = (index) => {
-            const db = getDatabase();
-            const snippetsRef = ref(db, 'snippets/' + item.id);
-            //On supprime le snippet de la base de données
-            set(snippetsRef, null).then(() => {
-                console.log("Snippet deleted successfully");
-            }).catch(error => {
-                console.error("Erreur lors de la suppression du snippet:", error);
-            });
-            //Avec filter on supprime du state l'élément correspondant à l'index donné
-            setSnippets(snippets.filter((_, i) => i !== index));
-        };
+
 
         const handleEditToggle = () => {
             setIsEditing(!isEditing);
@@ -40,18 +29,6 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
                 setEditedLanguage(item.language);
                 setEditedCode(item.code);
             }
-        }
-
-        const handleSave = (index) => {
-            const updatedSnippets = snippets.map((snippet, i) => 
-                i === index ? { ...snippet, title: editedTitle, language: editedLanguage, code: editedCode } : snippet
-            );
-            setSnippets(updatedSnippets);
-            localStorage.setItem('snippets', JSON.stringify(updatedSnippets));
-            setIsEditing(false);
-            setEditedTitle('');
-            setEditedLanguage('');
-            setEditedCode('');
         }
 
         //Download snippet as a JSON file
