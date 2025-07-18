@@ -7,6 +7,11 @@ export default function Header(){
             <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
         <h1>Code Snippets</h1>
+        <button className='logout' onClick={() => {
+          localStorage.removeItem('userId');
+          window.location.reload();
+        }
+        }>Logout</button>
       </>
     );
 }

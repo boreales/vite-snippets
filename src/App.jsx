@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import './App.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import SnippetPage from './SnippetPage';
-import AppComponent from './AppComponent.jsx'
 import './firebase.js';
 import { getDatabase, ref, child, get } from "firebase/database";
-import Auth from './Auth.jsx';
+import Header from './Header.jsx';
+import Search from './Search.jsx';
+import Form from './Form.jsx';
+import List from './List.jsx';
+import Auth from './Auth.jsx'; 
 
 function App() {
   const [snippets, setSnippets] = useState([]);
@@ -57,17 +58,17 @@ function App() {
 
   return (
     <>
-    {!isLogged && 
-      <Auth setIsLogged={setIsLogged} />
-    }
-    {isLogged &&
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<AppComponent isLoaded={isLoaded} setIsLogged={setIsLogged} snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch} />} />
-          <Route path="/snippet/:id" element={<SnippetPage snippets={filteredSnippets} />} />
-        </Routes>
-      </BrowserRouter>
-    }
+    {!isLogged && (<Auth setIsLogged={setIsLogged} />)}
+    {isLogged && (
+      <>
+      <Header />
+      <Search search={search} setSearch={setSearch}/>
+      <hr></hr>
+      <Form snippets={filteredSnippets} setSnippets={setSnippets} search={search} setSearch={setSearch}/>
+      <hr></hr>
+      <List snippets={filteredSnippets} setSnippets={setSnippets} search={search}/>
+      </>
+    )}
     </>
   )
 }
