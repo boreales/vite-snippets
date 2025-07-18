@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco, arduinoLight, androidstudio } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { getDatabase, ref, set} from "firebase/database";
+import { useSnippets } from '../context/SnippetContext.jsx';
 
-export default function Snippet({item, setSnippets, snippets, index, theme}) {
+export default function Snippet({item, theme}) {
+    const {deleteSnippet, updateSnippet} = useSnippets();
+
     switch (theme) {
         case 'arduinoLight':
             var themeSet = arduinoLight;
@@ -15,25 +17,24 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
             var themeSet = docco;
     }
         const [isEditing, setIsEditing] = useState(false);
-        const [editedTitle, setEditedTitle] = useState('');
-        const [editedLanguage, setEditedLanguage] = useState('');
-        const [editedCode, setEditedCode] = useState('');
-
-
+        const [formData, setFormData] = useState({
+            id: item.id,
+            title: item.title,
+            code: item.code,
+            language: item.language,
+        });
 
         const handleEditToggle = () => {
             setIsEditing(!isEditing);
             if (!isEditing) {
-                // Set initial values for editing
-                setEditedTitle(item.title);
-                setEditedLanguage(item.language);
-                setEditedCode(item.code);
+                // Reset formData
+                setFormData({ title: item.title, code: item.code, language: item.language });
             }
         }
 
         //Download snippet as a JSON file
-        const downloadSnippet = (index) => {
-            const snippetToDownload = snippets[index];
+        const downloadSnippet = (item) => {
+            const snippetToDownload = item;
             const blob = new Blob([JSON.stringify(snippetToDownload, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -61,28 +62,28 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
                 <input 
                     type="text" 
                     placeholder="Title" 
-                    value={editedTitle} 
-                    onChange={(e) => setEditedTitle(e.target.value)} 
+                    value={formData.title} 
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })} 
                 />
                 <input 
                     type="text" 
                     placeholder="Language" 
-                    value={editedLanguage} 
-                    onChange={(e) => setEditedLanguage(e.target.value)} 
+                    value={formData.language} 
+                    onChange={(e) => setFormData({ ...formData, language: e.target.value })} 
                 />
                 <textarea 
                     placeholder="Code" 
-                    value={editedCode} 
-                    onChange={(e) => setEditedCode(e.target.value)} 
+                    value={formData.code} 
+                    onChange={(e) => setFormData({ ...formData, code: e.target.value })} 
                 />
-                <button onClick={() => handleSave(index)}>Save</button>
+                <button onClick={() => updateSnippet(formData)}>Save</button>
                 <button onClick={handleEditToggle}>Cancel</button>
             </div>
             )}
             <button onClick={() => {
                 handleEditToggle();
             }}>Edit</button>
-            <button onClick={() => downloadSnippet(index)}>Download</button>
+            <button onClick={() => downloadSnippet(item)}>Download</button>
             <button style={{background:'red', color:'white'}} onClick={() => deleteSnippet(item.id)}>Delete</button>
             <button onClick={shareSnippet}>Partager</button>
         </>

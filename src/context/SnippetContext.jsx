@@ -98,16 +98,12 @@ export function SnippetProvider({ children }) {
         setSnippets(snippets.filter((_, i) => i !== index));
     };
 
-    const updateSnippet = (index) => {
+    const updateSnippet = (formData) => {
         const updatedSnippets = snippets.map((snippet, i) => 
-            i === index ? { ...snippet, title: editedTitle, language: editedLanguage, code: editedCode } : snippet
+            i === formData.id ? { ...snippet, title: formData.title, language: formData.language, code: formData.code } : snippet
         );
         setSnippets(updatedSnippets);
         localStorage.setItem('snippets', JSON.stringify(updatedSnippets));
-        setIsEditing(false);
-        setEditedTitle('');
-        setEditedLanguage('');
-        setEditedCode('');
     }
 
     // Valeur du contexte

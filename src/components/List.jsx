@@ -23,7 +23,7 @@ export default function List(){
             <ul>
             {filteredSnippets.map((item, index) => (
                 <li key={index}>
-                    <Snippet snippets={filteredSnippets} setSnippets={setSnippets} item={item} index={index} theme={theme} />
+                    <Snippet item={item} theme={theme} />
                 </li>
             ))}
             </ul>
