@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import './firebase.js';
+import '../firebase.js';
 import { getDatabase, ref, child, get, set } from "firebase/database";
 
 export const SnippetContext = createContext({
@@ -10,12 +10,16 @@ export const SnippetContext = createContext({
     updateSnippet: () => {},
     snippetCount: 0,
     isLoaded: false,
+    search: '',
+    setSearch: () => {},
+    filteredSnippets: [],
 });
 
 export function SnippetProvider({ children }) {
     const [snippets, setSnippets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [search, setSearch] = useState('');
     const dbRef = ref(getDatabase());
 
     // Charger les utilisateurs depuis localStorage au montage
@@ -52,6 +56,11 @@ export function SnippetProvider({ children }) {
           setIsLoaded(true);
         });
     }
+
+    const filteredSnippets = snippets.filter(snippet =>
+        snippet.title.toLowerCase().includes(search.toLowerCase()) ||
+        snippet.language.toLowerCase().includes(search.toLowerCase())
+    );
 
     // Fonction pour ajouter un utilisateur
     const addSnippet = (formData) => {
@@ -110,6 +119,9 @@ export function SnippetProvider({ children }) {
         updateSnippet,
         snippetCount: snippets.length,
         isLoaded,
+        filteredSnippets,
+        search,
+        setSearch
     };
 
     return (

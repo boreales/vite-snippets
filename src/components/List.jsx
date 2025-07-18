@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 import Snippet from './Snippet';
 import Filter from './Filter';
-import { useSnippets } from './SnippetContext';
+import { useSnippets } from '../context/SnippetContext';
 
-export default function List({search}){
+export default function List(){
     const [theme, setTheme] = useState('docco');
-    const { snippets, setSnippets } = useSnippets();
-
-    const filteredSnippets = snippets.filter(snippet =>
-        snippet.title.toLowerCase().includes(search.toLowerCase()) ||
-        snippet.language.toLowerCase().includes(search.toLowerCase())
-    );
+    const { filteredSnippets, setSnippets } = useSnippets();
 
     const handleChangeTheme = (newTheme) => {
         setTheme(newTheme);
@@ -19,7 +14,7 @@ export default function List({search}){
 
     return(
         <>
-            <Filter snippets={snippets} setSnippets={setSnippets} />
+            <Filter snippets={filteredSnippets} setSnippets={setSnippets} />
             <hr></hr>
             <h2>Liste des Snippets</h2>
             <p>Nombre de snippets : {filteredSnippets.length}</p>
@@ -28,7 +23,7 @@ export default function List({search}){
             <ul>
             {filteredSnippets.map((item, index) => (
                 <li key={index}>
-                    <Snippet snippets={snippets} setSnippets={setSnippets} item={item} index={index} theme={theme} />
+                    <Snippet snippets={filteredSnippets} setSnippets={setSnippets} item={item} index={index} theme={theme} />
                 </li>
             ))}
             </ul>

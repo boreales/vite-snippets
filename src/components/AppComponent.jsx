@@ -1,9 +1,9 @@
 import Form from './Form.jsx'
 import List from './List.jsx'
-import Header from './Header'
+import Header from './Header.jsx'
 import Search from './Search.jsx'
 import BeatLoader from 'react-spinners/BeatLoader';
-import { useSnippets } from './SnippetContext.jsx';
+import { useSnippets } from '../context/SnippetContext.jsx';
 
 export default function AppComponent({
     search, 

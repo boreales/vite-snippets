@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useSnippet } from './SnippetContext.jsx';
+import { useSnippet } from '../context/SnippetContext.jsx';
 
 export default function SnippetPage({ snippets }) {
   const { id } = useParams();

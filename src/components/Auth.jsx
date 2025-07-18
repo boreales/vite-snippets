@@ -1,6 +1,6 @@
 // Auth.js
 import React, { useState } from 'react';
-import { auth } from './firebase.js';
+import { auth } from '../firebase.js';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 function Auth({ setIsLogged }) {

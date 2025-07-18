@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { useSnippets } from '../context/SnippetContext.jsx';
 
-export default function Search({search, setSearch}){
+export default function Search(){
+    const { search, setSearch } = useSnippets();
 
     useEffect(() => {
         const timer = setTimeout(() => {
