@@ -52,6 +52,11 @@ export default function Snippet({item, theme}) {
             alert('Lien copié dans le presse-papier !');
           };
 
+        const handleSave = (id, formData) => {
+            updateSnippet(id, formData);
+            setIsEditing(false);
+        }
+
     return(
         <>
             {item.title} - {item.language} 
@@ -76,7 +81,7 @@ export default function Snippet({item, theme}) {
                     value={formData.code} 
                     onChange={(e) => setFormData({ ...formData, code: e.target.value })} 
                 />
-                <button onClick={() => updateSnippet(formData)}>Save</button>
+                <button onClick={() => handleSave(item.id, formData)}>Save</button>
                 <button onClick={handleEditToggle}>Cancel</button>
             </div>
             )}

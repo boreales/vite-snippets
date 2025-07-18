@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import './App.css'
+import './assets/App.css'
 import Auth from './components/Auth.jsx'; 
 import { SnippetProvider } from "./context/SnippetContext.jsx";
 import AppComponent from './components/AppComponent.jsx';

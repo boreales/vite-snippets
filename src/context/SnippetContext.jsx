@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import '../firebase.js';
-import { getDatabase, ref, child, get, set } from "firebase/database";
+import { getDatabase, ref, child, get, set, push } from "firebase/database";
 
 export const SnippetContext = createContext({
     snippets: [],
@@ -21,6 +21,7 @@ export function SnippetProvider({ children }) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [search, setSearch] = useState('');
     const dbRef = ref(getDatabase());
+    const userId = localStorage.getItem('userId');
 
     // Charger les utilisateurs depuis localStorage au montage
     useEffect(() => {
@@ -35,7 +36,7 @@ export function SnippetProvider({ children }) {
     }, []);
 
     async function loadedSnippets() {
-        get(child(dbRef, `snippets`)).then((snapshot) => {
+        get(child(dbRef, `snippets/` + userId)).then((snapshot) => {
           if (snapshot.exists()) {
             const data = snapshot.val();
             console.log('Data', Object.entries(data));
@@ -77,7 +78,7 @@ export function SnippetProvider({ children }) {
         setSnippets([...snippets, newSnippet]);
         
         const db = getDatabase();
-        const snippetsRef = ref(db, 'snippets/' + newSnippet.id);
+        const snippetsRef = ref(db, 'snippets/' + userId + '/' + newSnippet.id);
         set(snippetsRef, newSnippet).then(() => {
             console.log("Snippet added successfully");
           }).catch(error => {
@@ -85,9 +86,9 @@ export function SnippetProvider({ children }) {
         });
     };
 
-    const deleteSnippet = (index) => {
+    const deleteSnippet = (id) => {
         const db = getDatabase();
-        const snippetsRef = ref(db, 'snippets/' + item.id);
+        const snippetsRef = ref(db, 'snippets/' + userId + '/' + id);
         //On supprime le snippet de la base de données
         set(snippetsRef, null).then(() => {
             console.log("Snippet deleted successfully");
@@ -95,13 +96,37 @@ export function SnippetProvider({ children }) {
             console.error("Erreur lors de la suppression du snippet:", error);
         });
         //Avec filter on supprime du state l'élément correspondant à l'index donné
-        setSnippets(snippets.filter((_, i) => i !== index));
+        setSnippets(snippets.filter((snippet) => snippet.id !== id));
     };
 
-    const updateSnippet = (formData) => {
-        const updatedSnippets = snippets.map((snippet, i) => 
-            i === formData.id ? { ...snippet, title: formData.title, language: formData.language, code: formData.code } : snippet
+    const updateSnippet = (id, formData) => {
+        console.log(formData);
+        if (!formData.title.trim() || !formData.code.trim() || !formData.language.trim()) {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        //Update the snippet in the state
+        const updatedSnippets = snippets.map(snippet => 
+            snippet.id === id ? { ...snippet, ...formData } : snippet
         );
+        //On met à jour le snippet dans la base de données
+        console.log(updatedSnippets);
+        //Get the snippet to update
+        const snippetToUpdate = updatedSnippets.find(snippet => snippet.id === id);
+        if (!snippetToUpdate) {
+            console.error("Snippet not found for update");
+            return;
+        }
+        const db = getDatabase();
+        
+        const snippetsRef = ref(db, 'snippets/' + userId + '/' + snippetToUpdate.id);
+        //On met à jour le snippet dans la base de données
+        set(snippetsRef, snippetToUpdate).then(() => {
+            console.log("Snippet updated successfully");
+        }).catch(error => {
+            console.error("Erreur lors de la mise à jour du snippet:", error);
+        });
         setSnippets(updatedSnippets);
         localStorage.setItem('snippets', JSON.stringify(updatedSnippets));
     }

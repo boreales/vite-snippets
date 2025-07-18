@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { BsFillPlusCircleFill } from "react-icons/bs";
-import '../Form.css';
+import '../assets/Form.css';
 import { useSnippets } from '../context/SnippetContext';
 
 function Form() {
