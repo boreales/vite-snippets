@@ -69,7 +69,7 @@ export default function Snippet({item, setSnippets, snippets, index, theme}) {
         };
 
         const shareSnippet = () => {
-            const url = `${window.location.origin}/snippet/${index}`;
+            const url = `${window.location.origin}/snippet/${item.id}`;
             navigator.clipboard.writeText(url);
             alert('Lien copié dans le presse-papier !');
           };

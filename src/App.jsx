@@ -19,7 +19,6 @@ function App() {
     get(child(dbRef, `snippets`)).then((snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        console.log('Data', Object.entries(data));
         if (data) {
           const snippetsArray = Object.entries(data).map(([id, snippet]) => ({
             id,
