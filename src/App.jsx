@@ -2,10 +2,6 @@ import React, {useState, useEffect} from 'react'
 import './App.css'
 import './firebase.js';
 import { getDatabase, ref, child, get } from "firebase/database";
-import Header from './Header.jsx';
-import Search from './Search.jsx';
-import Form from './Form.jsx';
-import List from './List.jsx';
 import Auth from './Auth.jsx'; 
 import { BrowserRouter } from 'react-router-dom';
 import AppComponent from './AppComponent.jsx';
